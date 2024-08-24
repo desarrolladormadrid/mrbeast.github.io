@@ -1,359 +1,428 @@
-<html><head><base href="https://www.mql5.com/es/signals/author/desarrolladormadrid?orderby=gain">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MR BEAST WORLD MARKET - Forex & Crypto Charts</title>
-<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-<style>
-  body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    transition: all 0.3s;
-  }
-  .header {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    transition: all 0.3s;
-  }
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  .symbol-selector {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  .symbol-checkbox {
-    display: flex;
-    align-items: center;
-  }
-  h1 {
-    font-size: 2.5em;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin: 0;
-    transition: all 0.3s;
-  }
-  h1 a {
-    text-decoration: none;
-    transition: opacity 0.3s;
-  }
-  h1 a:hover {
-    opacity: 0.8;
-  }
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: 10px;
-  }
-  .chart-container {
-    margin-bottom: 20px;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: all 0.3s;
-  }
-  .chart {
-    height: 400px;
-  }
-  .chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    transition: all 0.3s;
-  }
-  h2 {
-    margin: 0;
-    font-size: 1.2em;
-    transition: all 0.3s;
-  }
-  .selector {
-    padding: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-left: 5px;
-  }
-  .selector:hover {
-    opacity: 0.8;
-  }
-  .section-title {
-    width: 100%;
-    text-align: center;
-    font-size: 2em;
-    margin: 20px 0;
-    padding: 10px;
-    border-radius: 10px;
-    transition: all 0.3s;
-  }
-  @media (max-width: 1200px) {
-    .chart-container {
-      width: calc(50% - 20px);
-    }
-  }
-  @media (max-width: 768px) {
-    .chart-container {
-      width: 100%;
-    }
-    .header-top {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .selector {
-      margin-top: 10px;
-    }
-  }
+<html>
 
-  /* Default Theme (Beast Mode) */
-  body.beast-mode {
-    background-color: #000000;
-    color: #e0e0e0;
-  }
-  .beast-mode .header {
-    background-color: #111111;
-  }
-  .beast-mode h1 a {
-    color: #00ff00;
-    text-shadow: 0 0 10px rgba(0,255,0,0.7);
-  }
-  .beast-mode .chart-container {
-    background-color: #111111;
-    box-shadow: 0 0 20px rgba(0,255,0,0.1);
-  }
-  .beast-mode .chart-header {
-    background-color: #222222;
-  }
-  .beast-mode h2 {
-    color: #00ff00;
-  }
-  .beast-mode .selector {
-    background-color: #333333;
-    color: #e0e0e0;
-  }
-  .beast-mode .section-title {
-    background-color: rgba(0,255,0,0.1);
-  }
-  .beast-mode .symbol-checkbox {
-    color: #e0e0e0;
-  }
+<head>
+    <base href="https://www.mql5.com/es/signals/author/desarrolladormadrid?orderby=gain">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MR BEAST WORLD MARKET - Forex & Crypto Charts</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
-  /* Other themes remain the same */
-</style>
-</head>
-<body class="beast-mode">
-  <div class="header">
-    <div class="header-top">
-      <h1><a href="https://www.mql5.com/es/signals/author/desarrolladormadrid?orderby=gain" target="_blank">MR BEAST WORLD MARKET</a></h1>
-      <div>
-        <select id="columnSelector" class="selector">
-          <option value="1">1 Column</option>
-          <option value="2">2 Columns</option>
-          <option value="3" selected>3 Columns</option>
-          <option value="4">4 Columns</option>
-          <option value="5">5 Columns</option>
-          <option value="6">6 Columns</option>
-        </select>
-        <select id="themeSelector" class="selector">
-          <option value="beast-mode">Beast Mode</option>
-          <option value="ocean-blue">Ocean Blue</option>
-          <option value="sunset-gold">Sunset Gold</option>
-          <option value="neon-cyberpunk">Neon Cyberpunk</option>
-          <option value="forest-green">Forest Green</option>
-          <option value="royal-purple">Royal Purple</option>
-          <option value="cherry-blossom">Cherry Blossom</option>
-          <option value="arctic-frost">Arctic Frost</option>
-          <option value="volcano-heat">Volcano Heat</option>
-          <option value="zen-garden">Zen Garden</option>
-        </select>
-        <select id="globalIndicatorSelector" class="selector">
-          <option value="ADX">ADX (Average Directional Index)</option>
-          <option value="MA">Moving Average</option>
-          <option value="EMA">Exponential Moving Average</option>
-          <option value="RSI">Relative Strength Index</option>
-          <option value="MACD">MACD</option>
-          <option value="BB">Bollinger Bands</option>
-        </select>
-        <select id="globalTimeframeSelector" class="selector">
-          <option value="D">Daily</option>
-          <option value="240">4 Hours</option>
-          <option value="60">1 Hour</option>
-          <option value="30">30 Minutes</option>
-          <option value="15">15 Minutes</option>
-          <option value="5">5 Minutes</option>
-          <option value="1">1 Minute</option>
-        </select>
-      </div>
-    </div>
-    <div class="symbol-selector" id="symbolSelector">
-      <!-- Symbol checkboxes will be dynamically inserted here -->
-    </div>
-  </div>
-  <div class="container" id="forexContainer">
-    <div class="section-title">Forex & Commodities</div>
-    <!-- Forex charts will be dynamically inserted here -->
-  </div>
-  <div class="container" id="cryptoContainer">
-    <div class="section-title">Cryptocurrencies</div>
-    <!-- Crypto charts will be dynamically inserted here -->
-  </div>
-
-  <script>
-    const forexPairs = [
-      "XAUUSD", "EURUSD", "EURJPY", "GBPUSD", "USDJPY", "USDCHF", "AUDUSD", "USDCAD", "NZDUSD", "EURGBP",
-      "GBPJPY", "EURCHF", "AUDJPY", "CADJPY", "NZDJPY", "GBPCHF", "EURAUD", "EURNZD", "GBPAUD", "GBPNZD",
-      "AUDNZD"
-    ];
-
-    const cryptoPairs = [
-      "BTCUSD", "ETHUSD", "XRPUSD"
-    ];
-
-    const forexContainer = document.getElementById('forexContainer');
-    const cryptoContainer = document.getElementById('cryptoContainer');
-    const themeSelector = document.getElementById('themeSelector');
-    const globalIndicatorSelector = document.getElementById('globalIndicatorSelector');
-    const globalTimeframeSelector = document.getElementById('globalTimeframeSelector');
-    const symbolSelector = document.getElementById('symbolSelector');
-    const columnSelector = document.getElementById('columnSelector');
-    let forexWidgets = [];
-    let cryptoWidgets = [];
-
-    function getIndicatorSettings(indicator) {
-      switch(indicator) {
-        case "ADX":
-          return [
-            { "id": "ADX@tv-basicstudies", "inputs": { "length": 14 } }
-          ];
-        case "MA":
-          return [
-            { "id": "MASimple@tv-basicstudies", "inputs": { "length": 20 } }
-          ];
-        case "EMA":
-          return [
-            { "id": "MAExp@tv-basicstudies", "inputs": { "length": 20 } }
-          ];
-        case "RSI":
-          return [
-            { "id": "RSI@tv-basicstudies", "inputs": { "length": 14 } }
-          ];
-        case "MACD":
-          return [
-            { "id": "MACD@tv-basicstudies" }
-          ];
-        case "BB":
-          return [
-            { "id": "BB@tv-basicstudies" }
-          ];
-        default:
-          return [
-            { "id": "ADX@tv-basicstudies", "inputs": { "length": 14 } }
-          ];
-      }
-    }
-
-    function getThemeSettings(theme) {
-      const isDark = ['beast-mode', 'ocean-blue', 'neon-cyberpunk', 'forest-green', 'royal-purple', 'volcano-heat'].includes(theme);
-      
-      let upColor, downColor, backgroundColor, textColor;
-
-      switch(theme) {
-        case 'beast-mode':
-          upColor = "#00ff00";
-          downColor = "#ff0000";
-          backgroundColor = "#000000";
-          textColor = "#e0e0e0";
-          break;
-        // Other theme cases remain the same
-        default:
-          upColor = "#00ff00";
-          downColor = "#ff0000";
-          backgroundColor = "#000000";
-          textColor = "#e0e0e0";
-      }
-
-      return {
-        isDark,
-        upColor,
-        downColor,
-        backgroundColor,
-        textColor
-      };
-    }
-
-    function createWidget(pair, index, interval, theme, indicator, isCrypto = false) {
-      const themeSettings = getThemeSettings(theme);
-      const containerId = `chart-${isCrypto ? 'crypto' : 'forex'}-${index}`;
-      
-      return new TradingView.widget({
-        "width": "100%",
-        "height": 400,
-        "symbol": isCrypto ? `BINANCE:${pair}` : `FOREXCOM:${pair}`,
-        "interval": interval,
-        "timezone": "Etc/UTC",
-        "theme": themeSettings.isDark ? "dark" : "light",
-        "style": "1",
-        "locale": "es",
-        "toolbar_bg": themeSettings.backgroundColor,
-        "enable_publishing": false,
-        "hide_top_toolbar": false,
-        "hide_legend": false,
-        "save_image": false,
-        "container_id": containerId,
-        "studies": getIndicatorSettings(indicator),
-        "disabled_features": [
-          "use_localstorage_for_settings",
-          "volume_force_overlay",
-          "create_volume_indicator_by_default"
-        ],
-        "enabled_features": [
-          "study_templates"
-        ],
-        "overrides": {
-          "mainSeriesProperties.candleStyle.upColor": themeSettings.upColor,
-          "mainSeriesProperties.candleStyle.downColor": themeSettings.downColor,
-          "mainSeriesProperties.candleStyle.drawWick": true,
-          "mainSeriesProperties.candleStyle.drawBorder": true,
-          "mainSeriesProperties.candleStyle.borderUpColor": themeSettings.upColor,
-          "mainSeriesProperties.candleStyle.borderDownColor": themeSettings.downColor,
-          "paneProperties.background": themeSettings.backgroundColor,
-          "paneProperties.vertGridProperties.color": themeSettings.isDark ? "#222222" : "#e0e0e0",
-          "paneProperties.horzGridProperties.color": themeSettings.isDark ? "#222222" : "#e0e0e0",
-          "scalesProperties.textColor": themeSettings.textColor
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <style>
+        a:hover {
+            /* text-decoration: none;*/
         }
-      });
-    }
 
-    function initCharts(theme, indicator, interval, columns) {
-      forexContainer.innerHTML = '<div class="section-title">Forex & Commodities</div>';
-      cryptoContainer.innerHTML = '<div class="section-title">Cryptocurrencies</div>';
-      forexWidgets = [];
-      cryptoWidgets = [];
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s;
+        }
 
-      const chartWidth = `calc(${100 / columns}% - 20px)`;
+        .header {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: all 0.3s;
+        }
 
-      forexPairs.forEach((pair, index) => {
-        const chartContainer = document.createElement('div');
-        chartContainer.className = 'chart-container';
-        chartContainer.id = `forex-container-${index}`;
-        chartContainer.style.width = chartWidth;
-        
-        const chartHeader = document.createElement('div');
-        chartHeader.className = 'chart-header';
-        
-        const title = document.createElement('h2');
-        title.textContent = pair;
-        chartHeader.appendChild(title);
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        const indicatorSelect = document.createElement('select');
-        indicatorSelect.className = 'selector';
-        indicatorSelect.innerHTML = `
+        .symbol-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .symbol-checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            transition: all 0.3s;
+        }
+
+        h1 a {
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        h1 a:hover {
+            opacity: 0.8;
+        }
+
+        .container2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .chart-container {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .chart {
+            height: 400px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            transition: all 0.3s;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .selector {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 5px;
+        }
+
+        .selector:hover {
+            opacity: 0.8;
+        }
+
+        .section-title {
+            width: 100%;
+            text-align: center;
+            font-size: 2em;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        input {
+            margin-bottom: 10px !important;
+            margin-right: 10px !important;
+        }
+
+        @media (max-width: 1200px) {
+            .chart-container {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                width: 100%;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .selector {
+                margin-top: 10px;
+            }
+        }
+
+        /* Default Theme (Beast Mode) */
+        body.beast-mode {
+            background-color: #000000;
+            color: #e0e0e0;
+        }
+
+        .beast-mode .header {
+            background-color: #111111;
+        }
+
+        .beast-mode h1 a {
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+        }
+
+        .beast-mode .chart-container {
+            background-color: #111111;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .beast-mode .chart-header {
+            background-color: #222222;
+        }
+
+        .beast-mode h2 {
+            color: #00ff00;
+        }
+
+        .beast-mode .selector {
+            background-color: #333333;
+            color: #e0e0e0;
+        }
+
+        .beast-mode .section-title {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+
+        .beast-mode .symbol-checkbox {
+            color: #e0e0e0;
+        }
+
+        /* Other themes remain the same */
+    </style>
+</head>
+
+<body class="beast-mode">
+    <div class="header">
+        <div class="header-top">
+            <h1><a href="https://www.mql5.com/es/signals/author/desarrolladormadrid?orderby=gain" target="_blank">MR
+                    BEAST WORLD MARKET</a></h1>
+            <div>
+                <select id="columnSelector" class="selector">
+                    <option value="1">1 Column</option>
+                    <option value="2">2 Columns</option>
+                    <option value="3" selected>3 Columns</option>
+                    <option value="4">4 Columns</option>
+                    <option value="5">5 Columns</option>
+                    <option value="6">6 Columns</option>
+                </select>
+                <select id="themeSelector" class="selector">
+                    <option value="beast-mode">Beast Mode</option>
+                    <option value="ocean-blue">Ocean Blue</option>
+                    <option value="sunset-gold">Sunset Gold</option>
+                    <option value="neon-cyberpunk">Neon Cyberpunk</option>
+                    <option value="forest-green">Forest Green</option>
+                    <option value="royal-purple">Royal Purple</option>
+                    <option value="cherry-blossom">Cherry Blossom</option>
+                    <option value="arctic-frost">Arctic Frost</option>
+                    <option value="volcano-heat">Volcano Heat</option>
+                    <option value="zen-garden">Zen Garden</option>
+                </select>
+                <select id="globalIndicatorSelector" class="selector">
+                    <option value="RSI">RSI </option>
+                    <option value="ADX">ADX (Average Directional Index)</option>
+                    <option value="MA">Moving Average</option>
+                    <option value="EMA">Exponential Moving Average</option>
+
+                    <option value="MACD">MACD</option>
+                    <option value="BB">Bollinger Bands</option>
+                </select>
+                <select id="globalTimeframeSelector" class="selector">
+                    <option value="D">Daily</option>
+                    <option value="240">4 Hours</option>
+                    <option value="60">1 Hour</option>
+                    <option value="30">30 Minutes</option>
+                    <option value="15">15 Minutes</option>
+                    <option value="5">5 Minutes</option>
+                    <option value="1">1 Minute</option>
+                    <option value=" 1W">1 Week</option>
+                    <option value=" 1M">1 Month</option>
+                </select>
+            </div>
+        </div>
+        <div>
+
+            <a class=" " style="color:rgb(2, 224, 69);font-size: 20px; padding-right: 20px;"
+                href="https://www.darwinexzero.com/es/darwin/MFZE/performance" target="_blank">Darwinex MZFE
+            </a>
+            <a class="" style="color:orange;font-size: 20px; padding-right: 20px;"
+                href="https://www.darwinexzero.com/es/darwin/FRHI/performance" target="_blank">Darwinex FRHI
+            </a>
+            <a class="" style="color:rgb(224, 56, 174);font-size: 20px; padding-right: 20px;"
+                href="https://www.darwinexzero.com/es/darwin/WJOU/performance" target="_blank">Darwinex WJOU
+            </a>
+            <P class="" style="color:rgb(255, 248, 39);font-size: 16px; padding-right: 20px;" href="" target="_blank">
+
+                CODIGO DESCUENTO CUENTA DARWINEX <span
+                    style="color:rgb(2, 224, 69);font-size: 16px; padding-right: 20px;padding-left: 20px;">DWZ2319043MGM</span>
+                <span style="color:orange;font-size: 16px; padding-right: 20px;">DWZ2318655MGM</span>
+                <span style="color:rgb(255, 248, 39);font-size: 16px; padding-right: 20px;">DWZ2319040MGM</span>
+            </P>
+        </div>
+        <div class="symbol-selector" id="symbolSelector">
+            <!-- Symbol checkboxes will be dynamically inserted here -->
+
+
+
+        </div>
+    </div>
+    <div class="container2" id="forexContainer">
+        <div class="section-title">Forex & Commodities</div>
+        <!-- Forex charts will be dynamically inserted here -->
+    </div>
+    <div class="container2" id="cryptoContainer">
+        <div class="section-title">Cryptocurrencies</div>
+        <!-- Crypto charts will be dynamically inserted here -->
+    </div>
+
+    <script>
+        const forexPairs = [
+            "XAUUSD", "EURUSD", "EURJPY", "GBPUSD", "USDJPY", "USDCHF", "AUDUSD", "USDCAD", "NZDUSD", "EURGBP",
+            "GBPJPY", "EURCHF", "AUDJPY", "CADJPY", "NZDJPY", "GBPCHF", "EURAUD", "EURNZD", "GBPAUD", "GBPNZD",
+            "AUDNZD"
+        ];
+
+        const cryptoPairs = [
+            "BTCUSD", "ETHUSD", "XRPUSD"
+        ];
+
+        const forexContainer = document.getElementById('forexContainer');
+        const cryptoContainer = document.getElementById('cryptoContainer');
+        const themeSelector = document.getElementById('themeSelector');
+        const globalIndicatorSelector = document.getElementById('globalIndicatorSelector');
+        const globalTimeframeSelector = document.getElementById('globalTimeframeSelector');
+        const symbolSelector = document.getElementById('symbolSelector');
+        const columnSelector = document.getElementById('columnSelector');
+        let forexWidgets = [];
+        let cryptoWidgets = [];
+
+        function getIndicatorSettings(indicator) {
+            switch (indicator) {
+                case "ADX":
+                    return [
+                        { "id": "ADX@tv-basicstudies", "inputs": { "length": 14 } }
+                    ];
+                case "MA":
+                    return [
+                        { "id": "MASimple@tv-basicstudies", "inputs": { "length": 20 } }
+                    ];
+                case "EMA":
+                    return [
+                        { "id": "MAExp@tv-basicstudies", "inputs": { "length": 20 } }
+                    ];
+                case "RSI":
+                    return [
+                        { "id": "RSI@tv-basicstudies", "inputs": { "length": 14 } }
+                    ];
+                case "MACD":
+                    return [
+                        { "id": "MACD@tv-basicstudies" }
+                    ];
+                case "BB":
+                    return [
+                        { "id": "BB@tv-basicstudies" }
+                    ];
+                default:
+                    return [
+                        { "id": "ADX@tv-basicstudies", "inputs": { "length": 14 } }
+                    ];
+            }
+        }
+
+        function getThemeSettings(theme) {
+            const isDark = ['beast-mode', 'ocean-blue', 'neon-cyberpunk', 'forest-green', 'royal-purple', 'volcano-heat'].includes(theme);
+
+            let upColor, downColor, backgroundColor, textColor;
+
+            switch (theme) {
+                case 'beast-mode':
+                    upColor = "#00ff00";
+                    downColor = "#ff0000";
+                    backgroundColor = "#000000";
+                    textColor = "#e0e0e0";
+                    break;
+                // Other theme cases remain the same
+                default:
+                    upColor = "#00ff00";
+                    downColor = "#ff0000";
+                    backgroundColor = "#000000";
+                    textColor = "#e0e0e0";
+            }
+
+            return {
+                isDark,
+                upColor,
+                downColor,
+                backgroundColor,
+                textColor
+            };
+        }
+
+        function createWidget(pair, index, interval, theme, indicator, isCrypto = false) {
+            const themeSettings = getThemeSettings(theme);
+            const containerId = `chart-${isCrypto ? 'crypto' : 'forex'}-${index}`;
+
+            return new TradingView.widget({
+                "width": "100%",
+                "height": 400,
+                "symbol": isCrypto ? `BINANCE:${pair}` : `FOREXCOM:${pair}`,
+                "interval": interval,
+                "timezone": "Etc/UTC",
+                "theme": themeSettings.isDark ? "dark" : "light",
+                "style": "1",
+                "locale": "es",
+                "toolbar_bg": themeSettings.backgroundColor,
+                "enable_publishing": false,
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "save_image": false,
+                "container_id": containerId,
+                "studies": getIndicatorSettings(indicator),
+                "disabled_features": [
+                    "use_localstorage_for_settings",
+                    "volume_force_overlay",
+                    "create_volume_indicator_by_default"
+                ],
+                "enabled_features": [
+                    "study_templates"
+                ],
+                "overrides": {
+                    "mainSeriesProperties.candleStyle.upColor": themeSettings.upColor,
+                    "mainSeriesProperties.candleStyle.downColor": themeSettings.downColor,
+                    "mainSeriesProperties.candleStyle.drawWick": true,
+                    "mainSeriesProperties.candleStyle.drawBorder": true,
+                    "mainSeriesProperties.candleStyle.borderUpColor": themeSettings.upColor,
+                    "mainSeriesProperties.candleStyle.borderDownColor": themeSettings.downColor,
+                    "paneProperties.background": themeSettings.backgroundColor,
+                    "paneProperties.vertGridProperties.color": themeSettings.isDark ? "#222222" : "#e0e0e0",
+                    "paneProperties.horzGridProperties.color": themeSettings.isDark ? "#222222" : "#e0e0e0",
+                    "scalesProperties.textColor": themeSettings.textColor
+                }
+            });
+        }
+
+        function initCharts(theme, indicator, interval, columns) {
+            forexContainer.innerHTML = '<div class="section-title">Forex & Commodities</div>';
+            cryptoContainer.innerHTML = '<div class="section-title">Cryptocurrencies</div>';
+            forexWidgets = [];
+            cryptoWidgets = [];
+
+            const chartWidth = `calc(${100 / columns}% - 20px)`;
+
+            forexPairs.forEach((pair, index) => {
+                const chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-container';
+                chartContainer.id = `forex-container-${index}`;
+                chartContainer.style.width = chartWidth;
+
+                const chartHeader = document.createElement('div');
+                chartHeader.className = 'chart-header';
+
+                const title = document.createElement('h2');
+                title.textContent = pair;
+                chartHeader.appendChild(title);
+
+                const indicatorSelect = document.createElement('select');
+                indicatorSelect.className = 'selector';
+                indicatorSelect.innerHTML = `
           <option value="ADX">ADX</option>
           <option value="MA">MA</option>
           <option value="EMA">EMA</option>
@@ -361,15 +430,15 @@
           <option value="MACD">MACD</option>
           <option value="BB">BB</option>
         `;
-        indicatorSelect.value = indicator;
-        indicatorSelect.addEventListener('change', (event) => {
-          updateChart(index, timeframeSelect.value, themeSelector.value, event.target.value, false);
-        });
-        chartHeader.appendChild(indicatorSelect);
+                indicatorSelect.value = indicator;
+                indicatorSelect.addEventListener('change', (event) => {
+                    updateChart(index, timeframeSelect.value, themeSelector.value, event.target.value, false);
+                });
+                chartHeader.appendChild(indicatorSelect);
 
-        const timeframeSelect = document.createElement('select');
-        timeframeSelect.className = 'selector';
-        timeframeSelect.innerHTML = `
+                const timeframeSelect = document.createElement('select');
+                timeframeSelect.className = 'selector';
+                timeframeSelect.innerHTML = `
           <option value="D">Daily</option>
           <option value="240">4 Hours</option>
           <option value="60">1 Hour</option>
@@ -378,40 +447,40 @@
           <option value="5">5 Minutes</option>
           <option value="1">1 Minute</option>
         `;
-        timeframeSelect.value = interval;
-        timeframeSelect.addEventListener('change', (event) => {
-          updateChart(index, event.target.value, themeSelector.value, indicatorSelect.value, false);
-        });
-        chartHeader.appendChild(timeframeSelect);
+                timeframeSelect.value = interval;
+                timeframeSelect.addEventListener('change', (event) => {
+                    updateChart(index, event.target.value, themeSelector.value, indicatorSelect.value, false);
+                });
+                chartHeader.appendChild(timeframeSelect);
 
-        chartContainer.appendChild(chartHeader);
+                chartContainer.appendChild(chartHeader);
 
-        const chartDiv = document.createElement('div');
-        chartDiv.id = `chart-forex-${index}`;
-        chartDiv.className = 'chart';
-        chartContainer.appendChild(chartDiv);
+                const chartDiv = document.createElement('div');
+                chartDiv.id = `chart-forex-${index}`;
+                chartDiv.className = 'chart';
+                chartContainer.appendChild(chartDiv);
 
-        forexContainer.appendChild(chartContainer);
+                forexContainer.appendChild(chartContainer);
 
-        forexWidgets.push(createWidget(pair, index, interval, theme, indicator));
-      });
+                forexWidgets.push(createWidget(pair, index, interval, theme, indicator));
+            });
 
-      cryptoPairs.forEach((pair, index) => {
-        const chartContainer = document.createElement('div');
-        chartContainer.className = 'chart-container';
-        chartContainer.id = `crypto-container-${index}`;
-        chartContainer.style.width = chartWidth;
-        
-        const chartHeader = document.createElement('div');
-        chartHeader.className = 'chart-header';
-        
-        const title = document.createElement('h2');
-        title.textContent = pair;
-        chartHeader.appendChild(title);
+            cryptoPairs.forEach((pair, index) => {
+                const chartContainer = document.createElement('div');
+                chartContainer.className = 'chart-container';
+                chartContainer.id = `crypto-container-${index}`;
+                chartContainer.style.width = chartWidth;
 
-        const indicatorSelect = document.createElement('select');
-        indicatorSelect.className = 'selector';
-        indicatorSelect.innerHTML = `
+                const chartHeader = document.createElement('div');
+                chartHeader.className = 'chart-header';
+
+                const title = document.createElement('h2');
+                title.textContent = pair;
+                chartHeader.appendChild(title);
+
+                const indicatorSelect = document.createElement('select');
+                indicatorSelect.className = 'selector';
+                indicatorSelect.innerHTML = `
           <option value="ADX">ADX</option>
           <option value="MA">MA</option>
           <option value="EMA">EMA</option>
@@ -419,15 +488,15 @@
           <option value="MACD">MACD</option>
           <option value="BB">BB</option>
         `;
-        indicatorSelect.value = indicator;
-        indicatorSelect.addEventListener('change', (event) => {
-          updateChart(index, timeframeSelect.value, themeSelector.value, event.target.value, true);
-        });
-        chartHeader.appendChild(indicatorSelect);
+                indicatorSelect.value = indicator;
+                indicatorSelect.addEventListener('change', (event) => {
+                    updateChart(index, timeframeSelect.value, themeSelector.value, event.target.value, true);
+                });
+                chartHeader.appendChild(indicatorSelect);
 
-        const timeframeSelect = document.createElement('select');
-        timeframeSelect.className = 'selector';
-        timeframeSelect.innerHTML = `
+                const timeframeSelect = document.createElement('select');
+                timeframeSelect.className = 'selector';
+                timeframeSelect.innerHTML = `
           <option value="D">Daily</option>
           <option value="240">4 Hours</option>
           <option value="60">1 Hour</option>
@@ -436,98 +505,396 @@
           <option value="5">5 Minutes</option>
           <option value="1">1 Minute</option>
         `;
-        timeframeSelect.value = interval;
-        timeframeSelect.addEventListener('change', (event) => {
-          updateChart(index, event.target.value, themeSelector.value, indicatorSelect.value, true);
-        });
-        chartHeader.appendChild(timeframeSelect);
+                timeframeSelect.value = interval;
+                timeframeSelect.addEventListener('change', (event) => {
+                    updateChart(index, event.target.value, themeSelector.value, indicatorSelect.value, true);
+                });
+                chartHeader.appendChild(timeframeSelect);
 
-        chartContainer.appendChild(chartHeader);
+                chartContainer.appendChild(chartHeader);
 
-        const chartDiv = document.createElement('div');
-        chartDiv.id = `chart-crypto-${index}`;
-        chartDiv.className = 'chart';
-        chartContainer.appendChild(chartDiv);
+                const chartDiv = document.createElement('div');
+                chartDiv.id = `chart-crypto-${index}`;
+                chartDiv.className = 'chart';
+                chartContainer.appendChild(chartDiv);
 
-        cryptoContainer.appendChild(chartContainer);
+                cryptoContainer.appendChild(chartContainer);
 
-        cryptoWidgets.push(createWidget(pair, index, interval, theme, indicator, true));
-      });
-    }
+                cryptoWidgets.push(createWidget(pair, index, interval, theme, indicator, true));
+            });
+        }
 
-    function updateChart(index, interval, theme, indicator, isCrypto) {
-      const widgets = isCrypto ? cryptoWidgets : forexWidgets;
-      const pairs = isCrypto ? cryptoPairs : forexPairs;
-      
-      widgets[index].remove();
-      widgets[index] = createWidget(pairs[index], index, interval, theme, indicator, isCrypto);
-    }
+        function updateChart(index, interval, theme, indicator, isCrypto) {
+            const widgets = isCrypto ? cryptoWidgets : forexWidgets;
+            const pairs = isCrypto ? cryptoPairs : forexPairs;
 
-    function updateAllCharts(theme, indicator, interval, columns) {
-      const chartWidth = `calc(${100 / columns}% - 20px)`;
-      
-      forexWidgets.forEach((widget, index) => {
-        const container = document.getElementById(`forex-container-${index}`);
-        container.style.width = chartWidth;
-        updateChart(index, interval, theme, indicator, false);
-      });
+            widgets[index].remove();
+            widgets[index] = createWidget(pairs[index], index, interval, theme, indicator, isCrypto);
+        }
 
-      cryptoWidgets.forEach((widget, index) => {
-        const container = document.getElementById(`crypto-container-${index}`);
-        container.style.width = chartWidth;
-        updateChart(index, interval, theme, indicator, true);
-      });
-    }
+        function updateAllCharts(theme, indicator, interval, columns) {
+            const chartWidth = `calc(${100 / columns}% - 20px)`;
 
-    function initSymbolSelector() {
-      const allPairs = [...forexPairs, ...cryptoPairs];
-      allPairs.forEach((pair, index) => {
-        const checkbox = document.createElement('div');
-        checkbox.className = 'symbol-checkbox';
-        checkbox.innerHTML = `
+            forexWidgets.forEach((widget, index) => {
+                const container = document.getElementById(`forex-container-${index}`);
+                container.style.width = chartWidth;
+                updateChart(index, interval, theme, indicator, false);
+            });
+
+            cryptoWidgets.forEach((widget, index) => {
+                const container = document.getElementById(`crypto-container-${index}`);
+                container.style.width = chartWidth;
+                updateChart(index, interval, theme, indicator, true);
+            });
+        }
+
+        function initSymbolSelector() {
+            const allPairs = [...forexPairs, ...cryptoPairs];
+            allPairs.forEach((pair, index) => {
+                const checkbox = document.createElement('div');
+                checkbox.className = 'symbol-checkbox';
+                checkbox.innerHTML = `
           <input type="checkbox" id="symbol-${index}" checked>
           <label for="symbol-${index}">${pair}</label>
         `;
-        checkbox.querySelector('input').addEventListener('change', (event) => {
-          toggleSymbol(pair, event.target.checked);
+                checkbox.querySelector('input').addEventListener('change', (event) => {
+                    toggleSymbol(pair, event.target.checked);
+                });
+                symbolSelector.appendChild(checkbox);
+            });
+        }
+
+        function toggleSymbol(pair, show) {
+            const isForex = forexPairs.includes(pair);
+            const container = isForex ? forexContainer : cryptoContainer;
+            const index = isForex ? forexPairs.indexOf(pair) : cryptoPairs.indexOf(pair);
+            const chartContainer = container.querySelector(`#${isForex ? 'forex' : 'crypto'}-container-${index}`);
+
+            if (show) {
+                chartContainer.style.display = 'block';
+            } else {
+                chartContainer.style.display = 'none';
+            }
+        }
+
+        themeSelector.addEventListener('change', (event) => {
+            document.body.className = event.target.value;
+            updateAllCharts(event.target.value, globalIndicatorSelector.value, globalTimeframeSelector.value, columnSelector.value);
         });
-        symbolSelector.appendChild(checkbox);
-      });
-    }
 
-    function toggleSymbol(pair, show) {
-      const isForex = forexPairs.includes(pair);
-      const container = isForex ? forexContainer : cryptoContainer;
-      const index = isForex ? forexPairs.indexOf(pair) : cryptoPairs.indexOf(pair);
-      const chartContainer = container.querySelector(`#${isForex ? 'forex' : 'crypto'}-container-${index}`);
-      
-      if (show) {
-        chartContainer.style.display = 'block';
-      } else {
-        chartContainer.style.display = 'none';
-      }
-    }
+        globalIndicatorSelector.addEventListener('change', (event) => {
+            updateAllCharts(themeSelector.value, event.target.value, globalTimeframeSelector.value, columnSelector.value);
+        });
 
-    themeSelector.addEventListener('change', (event) => {
-      document.body.className = event.target.value;
-      updateAllCharts(event.target.value, globalIndicatorSelector.value, globalTimeframeSelector.value, columnSelector.value);
-    });
+        globalTimeframeSelector.addEventListener('change', (event) => {
+            updateAllCharts(themeSelector.value, globalIndicatorSelector.value, event.target.value, columnSelector.value);
+        });
 
-    globalIndicatorSelector.addEventListener('change', (event) => {
-      updateAllCharts(themeSelector.value, event.target.value, globalTimeframeSelector.value, columnSelector.value);
-    });
+        columnSelector.addEventListener('change', (event) => {
+            updateAllCharts(themeSelector.value, globalIndicatorSelector.value, globalTimeframeSelector.value, event.target.value);
+        });
 
-    globalTimeframeSelector.addEventListener('change', (event) => {
-      updateAllCharts(themeSelector.value, globalIndicatorSelector.value, event.target.value, columnSelector.value);
-    });
-
-    columnSelector.addEventListener('change', (event) => {
-      updateAllCharts(themeSelector.value, globalIndicatorSelector.value, globalTimeframeSelector.value, event.target.value);
-    });
-
-    // Initialize charts with beast mode theme, ADX indicator, Daily timeframe, and 3 columns
-    initCharts('beast-mode', 'ADX', 'D', 3);
-    initSymbolSelector();
-  </script>
+        // Initialize charts with beast mode theme, ADX indicator, Daily timeframe, and 3 columns
+        initCharts('beast-mode', 'RSI', 'D', 3);
+        initSymbolSelector();
+    </script>
 </body>
+
+</html>
+
+
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Swaps Darwinex</title>
+
+    <style>
+        body,
+        html {
+            /*height: 100%;*/
+
+        }
+
+        table {
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            /*margin: 100px;*/
+        }
+
+        th {
+            cursor: pointer;
+        }
+
+        td,
+        th {
+            padding: 0.3rem !important;
+
+            /* Adjust padding to reduce the height */
+        }
+
+        th {
+            background-color: #006885 !important;
+        }
+
+        h2 {
+            padding-bottom: 1em !important;
+        }
+
+        @media (max-width: 768px) {
+
+            .movil {
+                display: none !important;
+            }
+
+            h2 {
+                margin-top: 10.5rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="mt-4">Tabla de Swaps Darwinex</h2>
+        <table class="table table-bordered table-hover table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th onclick="sortTable(0)" class="sortable">Ticker <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i>
+                    </th>
+                    <th onclick="sortTable(1)" class="sortable movil">Spread <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(2)" class="sortable movil">Margen <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(3)" class="sortable movil">Tamaño mín. <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(4)" class="sortable movil">Tamaño contrato <i
+                            class="fas fa-sort-up movil"></i><i class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(5)" class="sortable">Swap largo <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(6)" class="sortable">Swap corto <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i></th>
+                    <th onclick="sortTable(7)" class="sortable">Comisión <i class="fas fa-sort-up movil"></i><i
+                            class="fas fa-sort-down movil"></i>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+
+                <tr>
+                    <td>AUDCHF</td>
+                    <td class="movil">1.9 pips</td>
+                    <td class="movil">5.00 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 AUD</td>
+                    <td>4.1 CHF</td>
+                    <td>-6.5 CHF</td>
+                    <td>2.50 AUD</td>
+                </tr>
+
+                <tr>
+                    <td>AUDJPY</td>
+                    <td class="movil">1.8 pips</td>
+                    <td class="movil">5.00 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 AUD</td>
+                    <td>1030 JPY</td>
+                    <td>-1520 JPY</td>
+                    <td>2.50 AUD</td>
+                </tr>
+                <tr>
+                    <td>CADCHF</td>
+                    <td class="movil">1.7 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 CAD</td>
+                    <td>4.8 CHF</td>
+                    <td>-7.6 CHF</td>
+                    <td>2.50 CAD</td>
+                </tr>
+                <tr>
+                    <td>CADJPY</td>
+                    <td class="movil">2.0 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 CAD</td>
+                    <td>1270 JPY</td>
+                    <td>-1760 JPY</td>
+                    <td>2.50 CAD</td>
+                </tr>
+                <tr>
+                    <td>CHFJPY</td>
+                    <td class="movil">3.9 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 CHF</td>
+                    <td>340 JPY</td>
+                    <td>-900 JPY</td>
+                    <td>2.50 CHF</td>
+                </tr>
+                <tr>
+                    <td>EURCHF</td>
+                    <td class="movil">1.8 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 EUR</td>
+                    <td>4.8 CHF</td>
+                    <td>-9.8 CHF</td>
+                    <td>2.50 EUR</td>
+                </tr>
+                <tr>
+                    <td>EURGBP</td>
+                    <td class="movil">0.8 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 EUR</td>
+                    <td>-4.8 GBP</td>
+                    <td>1 GBP</td>
+                    <td>2.50 EUR</td>
+                </tr>
+                <tr>
+                    <td>EURJPY</td>
+                    <td class="movil">1.9 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 EUR</td>
+                    <td>1390 JPY</td>
+                    <td>-2160 JPY</td>
+                    <td>2.50 EUR</td>
+                </tr>
+                <tr>
+                    <td>EURUSD</td>
+                    <td class="movil">0.6 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 EUR</td>
+                    <td>-6.2 USD</td>
+                    <td>1 USD</td>
+                    <td>2.50 EUR</td>
+                </tr>
+                <tr>
+                    <td>GBPJPY</td>
+                    <td class="movil">4.3 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 GBP</td>
+                    <td>2410 JPY</td>
+                    <td>-3320 JPY</td>
+                    <td>2.50 GBP</td>
+                </tr>
+                <tr>
+                    <td>USDCHF</td>
+                    <td class="movil">1.3 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 USD</td>
+                    <td>7.6 CHF</td>
+                    <td>-12.8 CHF</td>
+                    <td>2.50 USD</td>
+                </tr>
+                <tr>
+                    <td>USDJPY</td>
+                    <td class="movil">1.0 pips</td>
+                    <td class="movil">3.33 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 USD</td>
+                    <td>1920 JPY</td>
+                    <td>-2770 JPY</td>
+                    <td>2.50 USD</td>
+                </tr>
+                <tr>
+                    <td>USDSGD</td>
+                    <td class="movil">2.0 pips</td>
+                    <td class="movil">5.00 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100000 USD</td>
+                    <td>3.9 SGD</td>
+                    <td>-9.7 SGD</td>
+                    <td>0.0025 USD</td>
+                </tr>
+                <tr>
+                    <td>XAUUSD</td>
+                    <td class="movil">0.51 pips</td>
+                    <td class="movil">5.00 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">100 USD</td>
+                    <td>-44.2 USD</td>
+                    <td>27.5USD</td>
+                    <td>2.50 USD</td>
+                </tr>
+                <tr>
+                    <td>XAGUSD</td>
+                    <td class="movil">0.02 pips</td>
+                    <td class="movil">10.00 %</td>
+                    <td class="movil">0.01</td>
+                    <td class="movil">5000 USD</td>
+                    <td>-28.5 SGD</td>
+                    <td>22 USD</td>
+                    <td>2.50 USD</td>
+                </tr>
+
+
+
+            </tbody>
+        </table>
+        <button class="btn-success" onclick="abrirVentana()">CALCULADORA RATING DARWINEX ZERO</button>
+        <style>
+            button {
+                padding: 10px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+        </style>
+        <script>
+            function abrirVentana() {
+                window.open("https://www.darwinexzero.com/es/asignacion-capital", "_blank", "width=800,height=600");
+            }
+        </script>
+    </div>
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.querySelector("table");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
 </html>
